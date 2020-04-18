@@ -1,0 +1,34 @@
+﻿<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+<script src="~/js/yamap.js"></script>
+
+<script type="text/javascript">
+                    @{var url = Url.Action("GetShopsData", "Home");}
+                    $.getJSON('@url', function (data) {
+                        initMap(data);
+                        $.each(data, function (i, item) {
+                            let desc = $("#description");
+                            desc.append(`<h3>${item.PlaceName}</h3>`);
+                            desc.append(`<span>Адрес</span>`);
+                            desc.append(`<p><i class="fas fa-map-marker-alt"></i>${item.Address}</p>`);
+                            desc.append(`<span>Телефон</span>`);
+                            desc.append(`<a href="tel:${item.LocalPhone}"><i class="fas fa-phone"></i>${item.LocalPhone}</a>`);
+                            desc.append(`<span>E-mail</span>`);
+                            desc.append(`<a href="mailto:mail@mail.com"><i class="far fa-envelope-open"></i>${item.Email}</a>`);
+                            desc.append(`<span>Режим работы</span>`);
+                            desc.append(`<p>${item.WorkTime}</p>`);
+                        });
+                    });
+</script>
+<div class="wrapper">
+    <div class="commun">
+        <div class="container">
+            <div class="communication">
+                <!-- Создаём контейнер для описания -->
+                <div id="description" class="commun_left"></div>
+                <!-- Создаём контейнер для карты -->
+                <div class="commun_right" id="map" style="width: 600px; height: 500px"></div>
+            </div>
+        </div>
+    </div>
+</div>

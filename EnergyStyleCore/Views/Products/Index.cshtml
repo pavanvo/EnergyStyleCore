@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Product>
+
+<div class="wrapper">
+    <!-- каталог товаров в категории -->
+    <div class="product">
+        <div class="container">
+            <div class="content">
+                <div class="product__main">
+                    <div class="product__left">
+                        <ul>
+                            @{
+                                var categories = ViewData["Categories"] as IEnumerable<Category>;
+                                foreach (var item in categories)
+                                {
+                                    var active = (item.Id == Model.FirstOrDefault().Category.Id) ? "class=active" : "";
+                                    <li @active ><a href="@Url.Action("Index", "Products", new {categoryId =  item.Id})">@item.Name</a></li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                    <div class="product__right">
+                        <div class="product__cards">
+                            @{
+                                foreach (var item in Model)
+                                {
+                                    <div class="product__card">
+                                        <a href="@Url.Action("Details", "Products", new {id = item.Id })">
+                                            <img src="@item.Images[0]" alt="">
+                                            <div class="description">
+                                                <p>@item.Name</p>
+                                                <p class="price">Розничная стоимость</p>
+                                                <p class="cost">@item.Price руб.</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

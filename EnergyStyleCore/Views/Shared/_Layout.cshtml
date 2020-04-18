@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/style.css" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/7713828ed3.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header__top">
+                <div class="header__logo">
+                    <a href="/"><img src="~/images/logo.png" alt=""></a>
+                </div>
+                <div class="header__search"><form class="search" action="/"><input type="text" placeholder="Поиск..."><button type="submit"></button></form></div>
+                <div id="header__phone" class="header__phone">
+                    <a href="/">Заказать звонок</a>
+                </div>
+                <div class="personal__enter">
+                    <a href="/"><i class="fas fa-lock"></i>Войти</a>
+                </div>
+            </div>
+            <div class="header__links">
+                @Html.ActionLink(" Каталог", "Index", "Products")
+                @Html.ActionLink(" Акции", "Sales", "Products")
+                @Html.ActionLink(" Наши услуги", "Index", "Services")
+                @Html.ActionLink(" О компании", "About", "Home")
+                @Html.ActionLink(" Контакты", "Contact", "Home")
+            </div>
+        </div>
+
+    </header>
+
+    @*<partial name="_CookieConsentPartial" />*@
+
+    @RenderBody()
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__links">
+                <div class="footer__link">
+                    @Html.ActionLink("Каталог", "Index", "Products")
+                    @Html.ActionLink("Акции", "Sales", "Products")
+                    @Html.ActionLink("Услуги", "Index", "Services")
+                </div>
+                <div class="footer__link">
+                    @Html.ActionLink("О компании", "About", "Home")
+                    @Html.ActionLink("Контакты", "Contact", "Home")
+                </div>
+                <div id="contacts" class="contacts"></div>
+            </div>
+            <div class="footer__row">Энергостиль © 2020</div>
+        </div>
+    </footer>
+    <script type="text/javascript">
+                    @{var url = Url.Action("GetShopsData", "Home");}
+                    $.getJSON('@url', function (data) {
+                        $.each(data, function (i, item) {
+                            let contacts = $("#contacts");
+                            contacts.append(`<p>Наши контакты</p>`);
+                            contacts.append(`<a href="tel:${item.LocalPhone}"><i class="fas fa-phone"></i>${item.LocalPhone}</a>`);
+                            contacts.append(`<a href="mailto:mail@mail.com"><i class="far fa-envelope-open"></i>${item.Email}</a>`);
+                            contacts.append(`<a href="@Url.Action("Contact", "Home")"><i class="fas fa-search-location"></i>${item.Address}</a>`);
+
+                            let header__phone = $("#header__phone");
+                            header__phone.append(`<a href="tel:${item.LocalPhone}"><i class="fas fa-phone"></i>${item.LocalPhone}</a>`);
+                        });
+                    });
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

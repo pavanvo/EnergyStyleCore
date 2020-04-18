@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Category>
+
+<div class="wrapper">
+    <div class="category__catalog">
+        <div class="container">
+            <div class="content">
+                <div class="category__cards">
+                    @{
+                        foreach (var item in Model)
+                        {
+                            <div class="category__card">
+                                <a href="@Url.Action("Index", "Products", new {categoryId =  item.Id})">
+                                    <img src="@item.Image" alt="">
+                                    <p>@item.Name</p>
+                                </a>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

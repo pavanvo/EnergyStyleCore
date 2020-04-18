@@ -1,0 +1,41 @@
+﻿@model Product
+<div class="wrapper">
+    <div class="items">
+        <div class="container">
+            <div class="content">
+                <div class="items__main">
+                    <div class="items__image">
+                        <img src="@Model.Images[0]" alt="">
+                    </div>
+                    <div class="items__description">
+                        <div class="item__title">@Model.Name</div>
+                        <div class="item__character">
+                            <span>Модель</span>
+                            <p>@Model.Model</p>
+                            <span>Мощность</span>
+                            <p>25кВт</p>
+                        </div>
+                    </div>
+
+                    <div class="item__puhchase">
+                        <span>Цена</span>
+                        <p>@Model.Price р</p>
+                        <button class="purchaise">Купить</button>
+                    </div>
+                </div>
+                <div class="item__charasteristic">
+                    <h5>Характеристики</h5>
+                    <div class="characteristic__row">
+                        <span>Модель</span>
+                        <p>@Model.Model</p>
+                    </div>
+
+                    <div class="characteristic__row">
+                        <span>Мощность</span>
+                        <p>24кВт</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
