@@ -385,8 +385,8 @@ form.search {
 }
 
 .infinity-size {
-    width: 250px;
-    height: 400px;
+    width: 450px;
+    height: 600px;
 }
 
 .size-about {
@@ -419,6 +419,7 @@ form.search {
     align-self: center;
     cursor: pointer;
     margin: 0 50px;
+    z-index: 100;
 }
 
 .btn-infinity-left {
@@ -467,8 +468,7 @@ form.search {
 }
 
 .items__image {
-    width: 500px;
-    height: 500px;
+    flex-basis: 50%;
 }
 
 .item__title {
