@@ -360,6 +360,18 @@ form.search {
 .about__company {
     padding: 10px 50px
 }
+    .about__company > h1{
+        font-size: 25px;
+        margin-bottom: 15px
+    }
+    .about__company > h2 {
+        margin-bottom: 7px;
+    }
+    .about_li > li {
+        list-style: decimal;
+        padding-bottom: 5px;
+        font-size: 18px
+    }
 
     .about__company h3 {
         font-size: 22px;
