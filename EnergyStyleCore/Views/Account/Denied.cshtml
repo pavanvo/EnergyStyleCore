@@ -1,0 +1,15 @@
+@using System.Security.Claims
+    
+<!-- Simple view used when a user doesn't have authorization to access a resource -->
+<h2>Доступ запрещён: @(User?.Identity?.Name ?? "User") Вам нельзя просматривать эту страницу.</h2>
+
+<!-- Show the current user's date of birth (if such a claim exists) for debugging purposes -->
+@{
+    var role = User?.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+}
+<h3>Уровень доступа: @(role ?? "<Undefined>")</h3>
+
+<ul>
+    <li>@Html.ActionLink("Домой", "Index", "Home")</li>
+    <li>@Html.ActionLink("Выйти", "Signout", "Account")</li>
+</ul>

@@ -1,6 +1,9 @@
 let images = document.querySelectorAll('.infinity-slider img');
 let current = 0;
 
+function refreshSlider() {
+    images = document.querySelectorAll('.infinity-slider img');
+}
 
 function slider() {
     for (let i = 0; i < images.length; i++) {
@@ -9,8 +12,7 @@ function slider() {
     images[current].classList.remove('opacity0');
     
 }
-slider();
-// document.querySelector('.infinity-slider').onclick = slider;
+
 document.querySelector('.btn-infinity-left').onclick = function(){
     if (current-1 == -1){
         current =  images.length - 1;

@@ -1,0 +1,70 @@
+﻿@model EnergyStyleCore.Models.Classes.Product
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Product</h4>
+    <hr />
+    <div class="wrapper">
+        <div class="items">
+            <div class="content">
+                <div class="items__main">
+                    <div class="items__image">
+                        <div class="slider">
+                            <div class="btn-infinity-left"></div>
+                            <div class="infinity-wrap infinity-size">
+                                <div class="infinity-slider infinity-size">
+                                    @foreach (var item in Model.Images)
+                                    {
+                                        <img src="@item" alt="">
+                                    }
+                                </div>
+                            </div>
+                            <div class="btn-infinity-right"></div>
+                        </div>
+                    </div>
+                    <div class="items__description">
+                        <div class="item__title">@Model.Name</div>
+                        <div class="item__character">
+                            <span>Модель</span>
+                            <p>@Model.Model</p>
+                            <span>В наличии</span>
+                            <p>@Model.Count</p>
+                        </div>
+                    </div>
+
+                    <div class="item__puhchase">
+                        <span>Цена</span>
+                        <p>@Model.Price р</p>
+                        <button class="purchaise">Купить</button>
+                    </div>
+                </div>
+                <div class="item__charasteristic">
+                    <h5>Характеристики</h5>
+                    @foreach (var item in Model.Characteristics)
+                    {
+                        <div class="characteristic__row">
+                            <span>@item.Name</span>
+                            <p>@item.Value</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="/js/slider.js"></script>
+}

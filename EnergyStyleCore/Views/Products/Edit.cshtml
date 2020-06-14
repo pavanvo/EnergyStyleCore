@@ -1,0 +1,113 @@
+﻿@using EnergyStyleCore.Models.Classes;
+@model Product
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="items__image">
+        <div class="slider">
+            <div class="btn-infinity-left"></div>
+            <div class="infinity-wrap infinity-size">
+                <div id="imgSrc" class="infinity-slider infinity-size">
+                    @foreach (var item in Model.Images)
+                    {
+                        <img src="@item" alt="">
+                    }
+                </div>
+            </div>
+            <div class="btn-infinity-right"></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="Uploads" asp-controller="File" method="post" enctype="multipart/form-data"
+              data-ajax="true"
+              data-ajax-method="post"
+              data-ajax-complete="FilesUploaded">
+            <div style="display :flex">
+                <input type="file" name="files" multiple style="flex-basis:40%" /><br>
+                <input type="submit" value="Загрузить" style="flex-basis: 40%" />
+            </div>
+        </form>
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Model" class="control-label"></label>
+                <input asp-for="Model" class="form-control" />
+                <span asp-validation-for="Model" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Count" class="control-label"></label>
+                <input asp-for="Count" class="form-control" />
+                <span asp-validation-for="Count" class="text-danger"></span>
+            </div>
+            <div id="imgPath" class="form-group" style="display:none">
+                <label asp-for="Images" class="control-label"></label>
+                @for (int i = 0; i < Model.Images.Count; i++)
+                {
+                    var name = $"Images[{i}]";
+                    <input type="text" name="@name" value="@Model.Images[i]" class="form-control" />
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                <select asp-for="Category.Id"
+                        asp-items="@(new SelectList(ViewData["Categories"] as IEnumerable<Category>,"Id","Name"))">
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Characteristics" class="control-label"></label>
+                <button type="button" onclick="addCharClick()" class="form-control">Добавить</button>
+                <div id="characteristics" class="form-group">
+                    @for (int i = 0; i < Model.Characteristics.Count; i++)
+                    {
+                        <div>
+                            @{
+                                var id = $"Characteristics[{i}].Id";
+                                <input type="text" name="@id" value="@Model.Characteristics.ElementAt(i).Id" style="display:none" />
+
+                                var name = $"Characteristics[{i}].Name";
+                                <input type="text" name="@name" value="@Model.Characteristics.ElementAt(i).Name"
+                                       placeholder="Введите название" style="margin-top: 10px; margin-bottom: 5px;" class="form-control" />
+
+                                var value = $"Characteristics[{i}].Value";
+                                <input type="text" name="@value" value="@Model.Characteristics.ElementAt(i).Value"
+                                       placeholder="Введите значение" style="margin-top: 5px; margin-bottom: 10px;" class="form-control" />
+                            }
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="/js/slider.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

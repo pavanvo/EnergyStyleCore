@@ -1,18 +1,17 @@
-﻿let Data;
-function initMap(data) {
-    Data = data;
-    ymaps.ready(init);
-}
+﻿
+function initMap(data, index, parent) {
+    ymaps.ready(() => {
 
-function init() {
-
-    // Проходим по всем данным и устанавливаем для них маркеры
-    $.each(Data, function (i, item) {
+        let div = document.createElement('div');
+        div.id = `map${index}`;
+        div.className = 'commun_right';
+        div.style = 'width: 600px; height: 500px';
+        parent.append(div);
         // Создание карты.
-        let myMap = new ymaps.Map("map", {
+        let myMap = new ymaps.Map(`map${index}`, {
             // Координаты центра карты.
             // Порядок по умолчнию: «широта, долгота».
-            center: [item.GeoLong, item.GeoLat],
+            center: [data.geoLong, data.geoLat],
             // Уровень масштабирования. Допустимые значения:
             // от 0 (весь мир) до 19.
             zoom: 16,
@@ -29,15 +28,15 @@ function init() {
         });
 
         // Добавление метки
-        let myPlacemark = new ymaps.Placemark([item.GeoLong, item.GeoLat], {
+        let myPlacemark = new ymaps.Placemark([data.geoLong, data.geoLat], {
             // Хинт показывается при наведении мышкой на иконку метки.
-            hintContent: item.PlaceName,
+            hintContent: data.glaceName,
             // Балун откроется при клике по метке.
-            balloonContent: "<div class='storeInfo'><h3>Магазин: " + item.PlaceName + "</h3><div><h4>Часы работы: "
-                + item.WorkTime + "</h4></div><div><h4>Телефон: " + item.LocalPhone + "</h4></div></div>"
+            balloonContent: "<div class='storeInfo'><h3>Магазин: " + data.placeName + "</h3><div><h4>Часы работы: "
+                + data.workTime + "</h4></div><div><h4>Телефон: " + data.localPhone + "</h4></div></div>"
         });
         // После того как метка была создана, добавляем её на карту.
         myMap.geoObjects.add(myPlacemark);
-    });
 
+    });
 }

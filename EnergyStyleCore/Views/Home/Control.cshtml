@@ -1,0 +1,26 @@
+﻿@using System.Security.Claims
+
+
+@if (!string.IsNullOrWhiteSpace(User?.Identity?.Name))
+{
+    var role = User.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+    if (role.Contains("admin"))
+    {
+        <div style="align-self:center; font-size: 20px">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index" title="Для настройки">Сотрудники</a>
+        </div>
+    }
+    <div style="align-self:center; font-size: 20px">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index" title="Для настройки">Категории</a>
+    </div>
+    <div style="align-self:center; font-size: 20px">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index" title="Для настройки">Товары</a>
+    </div>
+    <div style="align-self:center; font-size: 20px">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Services" asp-action="Index" title="Для настройки">Услуги</a>
+    </div>
+    <div style="align-self:center; font-size: 20px">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Stores" asp-action="Index" title="Для настройки">Магазины</a>
+    </div>
+}

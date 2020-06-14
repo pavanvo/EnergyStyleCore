@@ -1,45 +1,74 @@
-﻿@model IEnumerable<Product>
+﻿@using EnergyStyleCore.Models.Classes;
+@using System.Security.Claims
+@model IEnumerable<Product>
 
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (!string.IsNullOrWhiteSpace(User?.Identity?.Name))
+{
+    var role = User.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+    if (role.Contains("user"))
+    {
+        <p class="paragrath">
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
 <div class="wrapper">
     <!-- каталог товаров в категории -->
     <div class="product">
-        <div class="container">
-            <div class="content">
-                <div class="product__main">
-                    <div class="product__left">
-                        <ul>
-                            @{
-                                var categories = ViewData["Categories"] as IEnumerable<Category>;
-                                foreach (var item in categories)
-                                {
-                                    var active = (item.Id == Model.FirstOrDefault().Category.Id) ? "class=active" : "";
-                                    <li @active ><a href="@Url.Action("Index", "Products", new {categoryId =  item.Id})">@item.Name</a></li>
-                                }
+        <div class="content">
+            <div class="product__main">
+                <div class="product__left">
+                    <ul>
+                        @{
+                            var categories = ViewData["Categories"] as IEnumerable<Category>;
+                            foreach (var item in categories)
+                            {
+                                var active = (item.Id == Model.FirstOrDefault()?.Category.Id) ? "class=active" : "";
+                                <li @active><a href="@Url.Action("Index", "Products", new {categoryId =  item.Id})">@item.Name</a></li>
                             }
-                        </ul>
-                    </div>
-                    <div class="product__right">
-                        <div class="product__cards">
-                            @{
-                                foreach (var item in Model)
-                                {
-                                    <div class="product__card">
-                                        <a href="@Url.Action("Details", "Products", new {id = item.Id })">
-                                            <img src="@item.Images[0]" alt="">
-                                            <div class="description">
-                                                <p>@item.Name</p>
-                                                <p class="price">Розничная стоимость</p>
-                                                <p class="cost">@item.Price руб.</p>
-                                            </div>
-                                        </a>
+                        }
+                    </ul>
+                </div>
+                <div class="product__right">
+                    <div class="product__cards">
+
+                        @foreach (var product in Model)
+                        {
+                            <div class="product__card">
+                                <a href="@Url.Action("Details", "Products", new {id = product.Id })">
+                                    <img src="@product.Images?[0]?" alt="">
+                                    <div class="description">
+                                        <p>@product.Name</p>
+                                        <p class="price">Розничная стоимость</p>
+                                        <p class="cost">@product.Price руб.</p>
                                     </div>
+                                </a>
+                                @if (!string.IsNullOrWhiteSpace(User?.Identity?.Name))
+                                {
+                                    var role = User.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+                                    if (role.Contains("user"))
+                                    {
+                                        <p class="paragrath">
+                                            <a asp-action="Edit" asp-route-id="@product.Id">Edit</a> |
+                                            <a asp-action="Details" asp-route-id="@product.Id">Details</a> |
+                                            <a asp-action="Delete" asp-route-id="@product.Id">Delete</a>
+                                        </p>
+                                    }
                                 }
 
-                            }
-                        </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+

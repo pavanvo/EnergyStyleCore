@@ -1,0 +1,60 @@
+﻿@model EnergyStyleCore.Models.Classes.Category
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Category</h4>
+<hr />
+<div class="row">
+    <div class="items__image">
+        <div class="slider">
+            <div class="btn-infinity-left"></div>
+            <div class="infinity-wrap infinity-size">
+                <div class="infinity-slider infinity-size">
+                    <img id="imgSrc" style="height: auto; width: 470px; display:none" />
+                </div>
+            </div>
+            <div class="btn-infinity-right"></div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="Upload" asp-controller="File" method="post" enctype="multipart/form-data"
+              data-ajax="true"
+              data-ajax-method="post"
+              data-ajax-complete="FileUploaded">
+            <div style="display :flex">
+                <input type="file" name="file" style="flex-basis:40%" /><br>
+                <input type="submit" value="Загрузить" style="flex-basis: 40%" />
+            </div>
+        </form>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display:none">
+                <label asp-for="Image" class="control-label"></label>
+                <input id="imgPath" asp-for="Image" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    <script src="/js/slider.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,23 @@
+@using System.Security.Claims
+
+
+@if (!string.IsNullOrWhiteSpace(User?.Identity?.Name))
+{
+    var role = User.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+    if (role.Contains("user"))
+    {
+        <div style="align-self:center; font-size: 14px">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Control" title="Для настройки">Здравствуйте @User.Identity.Name!</a>
+        </div>
+    }
+    <div class="personal__enter">
+        <a asp-area="" asp-controller="Account" asp-action="Signout"><i class="fas fa-lock"></i>Выйти</a>
+    </div>
+}
+else
+{
+    <div class="personal__enter">
+        <a asp-area="" asp-controller="Account" asp-action="Signin"><i class="fas fa-lock"></i>Войти</a>
+    </div>
+}

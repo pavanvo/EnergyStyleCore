@@ -1,14 +1,20 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using EnergyStyleCore.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
+using CustomPolicyProvider;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace EnergyStyleCore
 {
@@ -24,19 +30,50 @@ namespace EnergyStyleCore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
+#if DEBUG
+            services.AddDbContext<AppDBContext>(
+                options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")
+                    )
+                );
+#endif
+#if RELEASE
+            services.AddDbContext<AppDBContext>(
+                options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("HostConnection")
+                    ));
+#endif
+            services.AddDataProtection().PersistKeysToDbContext<AppDBContext>();
+
+
+            // Replace the default authorization policy provider with our own
+            // custom provider which can return authorization policies for given
+            // policy names (instead of using the default policy provider)
+            services.AddSingleton<IAuthorizationPolicyProvider, RolePolicyProvider>();
+
+            // As always, handlers must be provided for the requirements of the authorization policies
+            services.AddSingleton<IAuthorizationHandler, RoleAuthorizationHandler>();
+
+            services.AddControllersWithViews();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.AccessDeniedPath = "/account/denied";
+                    options.LoginPath = "/account/signin";
+                });
+
+            services.Configure<SecurityStampValidatorOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                // enables immediate logout, after updating the user's stat.
+                options.ValidationInterval = TimeSpan.FromHours(12);
             });
-
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -45,18 +82,22 @@ namespace EnergyStyleCore
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
 
-            app.UseMvc(routes =>
+            app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

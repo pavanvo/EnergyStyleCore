@@ -4,18 +4,27 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using EnergyStyleCore.Models;
-using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
+using EnergyStyleCore.Models.Classes;
+using CustomPolicyProvider;
 
 namespace EnergyStyleCore.Controllers
 {
     public class HomeController : Controller
     {
-        DataBase db = DataBase.GetInstance();
-        public IActionResult Index()
+        private readonly AppDBContext _context;
+
+        public HomeController(AppDBContext context)
         {
-            var categories = db.Categories;
-            return View(categories);
+            _context = context;
+        }
+
+        // GET: Categories
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Categories.ToListAsync());
         }
 
         public IActionResult About()
@@ -29,23 +38,9 @@ namespace EnergyStyleCore.Controllers
         }
 
         [HttpGet]
-        public string GetShopsData()
+        public IActionResult GetShopsData()
         {
-            // создадим список данных
-            List<Store> stores = new List<Store>();
-            stores.Add(new Store()
-            {
-                Id = stores.Count + 1,
-                PlaceName = "Офис компании \"Енерго Стиль\"",
-                Address = "РФ, Иркутская обл., Усть-Илимск, Пром площадка ЛПК тер.",
-                GeoLat = 102.7806783,
-                GeoLong = 58.039749,
-                WorkTime = "8:00 - 21:00",
-                LocalPhone = "456-57-95",
-                Email = "EnergoStyle@mail.com",
-            });
-            var json = JsonConvert.SerializeObject(stores);
-            return json;
+            return Json(_context.Stores.ToList());
         }
 
         public IActionResult Privacy()
@@ -57,6 +52,12 @@ namespace EnergyStyleCore.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [RoleAuthorize("user")]
+        public IActionResult Control()
+        {
+            return View();
         }
     }
 }

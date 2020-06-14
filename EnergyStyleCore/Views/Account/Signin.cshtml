@@ -1,0 +1,21 @@
+@model string
+
+<h1>Войти</h1>
+<div>
+    <div>@Model</div>
+    <form asp-controller="Account" asp-action="Signin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post">
+        <div>
+            <label>Логин</label>
+            <input id="UserName" type="text" name="userName" />
+        </div>
+
+        <div>
+            <label>Пароль</label>
+            <input id="Pass" type="text" name="pass" />
+        </div>
+
+        <div>
+            <button type="submit">Войти</button>
+        </div>
+    </form>
+</div>

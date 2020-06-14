@@ -1,19 +1,54 @@
-﻿
+﻿@using System.Security.Claims;
+@using EnergyStyleCore.Models.Classes;
+@model IEnumerable<Service>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (!string.IsNullOrWhiteSpace(User?.Identity?.Name))
+{
+    var role = User.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+    if (role.Contains("user"))
+    {
+        <p class="paragrath">
+            <a asp-action="Create">Create New</a>
+        </p>
+    }
+}
+
 <div class="wrapper">
     <div class="services">
-        <div class="container">
-            <div class="content">
-                <div class="services__title">
-                    <h3>Доверьте работу профессионалам.</h3>
-                </div>
-                <div class="services__card">
-                    <div class="card__right"><img src="/images/services/3.jpg" alt="services">  </div>
-                    <div class="card__left">
-                        <div class="card__title">Сервисное обслуживание котла</div>
-                        <div class="services__info">Компания выполняет качественное обслуживание котла в минимально короткие сроки. Предоставляется гарантия</div>
-                    </div>
-                </div>
+        <div class="content">
+            <div class="services__title">
+                <h3>Доверьте работу профессионалам.</h3>
             </div>
+            @foreach (var item in Model)
+            {
+                <div class="services__card">
+                    <div class="card__right"><img src="@item.Images[0]?" alt="services"> </div>
+                    <div class="card__left">
+                        <div class="card__title">@item.Title</div>
+                        <div class="services__info">@item.Name</div>
+                        <div class="services__info">@item.Info</div>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(User?.Identity?.Name))
+                    {
+                        var role = User.FindFirst(c => c.Type == ClaimTypes.Role)?.Value;
+
+                        if (role.Contains("user"))
+                        {
+                            <p class="paragrath">
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </p>
+                        }
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>

@@ -61,7 +61,7 @@ li {
 
 form.search {
     position: relative;
-    width: 700px;
+    width: 550px;
     margin: 0 auto;
 }
 
@@ -105,6 +105,10 @@ form.search {
         font-size: 22px;
         letter-spacing: unset;
     }
+
+        .header__phone a:hover {
+            cursor: pointer;
+        }
 
         .header__phone a > i {
             color: #1136ff;
@@ -241,6 +245,7 @@ form.search {
 
     .category__card img {
         padding: 20px;
+        object-fit: contain;
         width: 300px;
         height: 300px;
     }
@@ -321,6 +326,8 @@ form.search {
 
         .product__card a > img {
             margin: 10px 0;
+            object-fit: contain;
+            height: 200px;
             width: 200px;
             align-self: center;
         }
@@ -329,6 +336,12 @@ form.search {
         text-align: center;
         color: #000;
     }
+
+.paragrath {
+    display: flex;
+    margin: 0 15px;
+    justify-content: space-between;
+}
 
 .description p:first-child {
     font-size: 20px;
@@ -360,28 +373,31 @@ form.search {
 .about__company {
     padding: 10px 50px
 }
-    .about__company > h1{
+
+    .about__company > h1 {
         font-size: 25px;
         margin-bottom: 15px
     }
+
     .about__company > h2 {
         margin-bottom: 7px;
     }
-    .about_li > li {
-        list-style: decimal;
-        padding-bottom: 5px;
-        font-size: 18px
-    }
 
-    .about__company h3 {
-        font-size: 22px;
-        padding-bottom: 20px;
-    }
+.about_li > li {
+    list-style: decimal;
+    padding-bottom: 5px;
+    font-size: 18px
+}
 
-    .about__company p {
-        padding: 0 20px 10px 20px;
-        font-size: 18px;
-    }
+.about__company h3 {
+    font-size: 22px;
+    padding-bottom: 20px;
+}
+
+.about__company p {
+    padding: 0 20px 10px 20px;
+    font-size: 18px;
+}
 /* slider */
 
 .slider {
@@ -415,6 +431,7 @@ form.search {
         width: 100%;
         height: 100%;
         position: absolute;
+        object-fit: contain;
         opacity: 1;
         transition: all ease 1s;
     }
@@ -456,6 +473,7 @@ form.search {
 }
 
 .card__right img {
+    object-fit: contain;
     width: 350px;
     height: 250px;
 }
@@ -574,6 +592,7 @@ form.search {
 .communication {
     display: flex;
     justify-content: space-around;
+    flex-direction: column;
     padding-top: 20px;
 }
 
